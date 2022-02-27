@@ -1,4 +1,5 @@
 const express = require("express");
+require("express-async-errors");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
@@ -9,9 +10,14 @@ const fileUpload = require("express-fileupload");
 const rateLimiter = require("express-rate-limit");
 const slowDown = require("express-slow-down");
 
-const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
-const index = require("./errors/index");
+//middleware
+const notFoundMiddleware = require("./middleware/notFound");
+const errorHandlerMiddleware = require("./middleware/errorHandler");
+
+const favRouter = require("./routes/favRoute");
+//const usersRouter = require("./routes/userRoute");
+const bookRouter = require("./routes/bookRoute");
+const authRouter = require("./routes/authRoute");
 const app = express();
 
 app.set("trust proxy", 1); // if app is behind nginx/or proxy
@@ -39,12 +45,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(fileUpload());
 // Routes
-app.use("/api/v1/auth", indexRouter);
-app.use("/api/v1/user", indexRouter);
-app.use("/api/v1/book", indexRouter);
-app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/book", bookRouter);
+app.use("/api/v1/fav", favRouter);
+//app.use("/api/v1/users", usersRouter);
 
 // use middleware
-//app.use(index);
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
 
 module.exports = app;
