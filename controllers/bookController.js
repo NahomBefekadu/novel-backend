@@ -27,9 +27,9 @@ const getBooks = async (req, res) => {
 };
 // Post Section
 const createBook = async (req, res) => {
-  const statement = `INSERT INTO books (book_name,summary,author,isbn,publishing_year,genre,image,rating,author_id)
+  const statement = `INSERT INTO books (book_name,summary,author,isbn,publishing_year,genre,image,rating)
       VALUES
-      ($1,$2,$3,$4,$5,$6,$7,$8,$9,);`;
+      ($1,$2,$3,$4,$5,$6,$7,$8);`;
   const values = [
     req.body.book_name,
     req.body.summary,
@@ -39,7 +39,6 @@ const createBook = async (req, res) => {
     req.body.genre,
     req.body.image,
     req.body.rating,
-    req.query.author_id,
   ];
   //console.log(query(statement, values));
 
@@ -51,7 +50,6 @@ const createBook = async (req, res) => {
     request: values,
   });
 };
-const uploadImage = async (req, res) => {};
 // Patch Section
 const updateBook = async (req, res) => {
   const statement = `UPDATE books SET book_name= $1,summary= $2,author= $3,isbn= $4,publishing_year= $5,genre= $6 where book_id = $7`;

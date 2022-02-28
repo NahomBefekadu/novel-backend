@@ -18,6 +18,7 @@ const favRouter = require("./routes/favRoute");
 //const usersRouter = require("./routes/userRoute");
 const bookRouter = require("./routes/bookRoute");
 const authRouter = require("./routes/authRoute");
+const personalBookRouter = require("./routes/personalBookRoute");
 const app = express();
 
 app.set("trust proxy", 1); // if app is behind nginx/or proxy
@@ -48,6 +49,7 @@ app.use(fileUpload());
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/book", bookRouter);
 app.use("/api/v1/fav", favRouter);
+app.use("/api/v1/personal", personalBookRouter);
 //app.use("/api/v1/users", usersRouter);
 
 // use middleware
