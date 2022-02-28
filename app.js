@@ -1,4 +1,5 @@
 const express = require("express");
+require("dotenv").config();
 require("express-async-errors");
 const path = require("path");
 const cookieParser = require("cookie-parser");
@@ -10,6 +11,13 @@ const fileUpload = require("express-fileupload");
 const rateLimiter = require("express-rate-limit");
 const slowDown = require("express-slow-down");
 
+// Cloudinary
+const cloudinary = require("cloudinary").v2;
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_KEY,
+  api_secret: process.env.CLOUD_SECRET,
+});
 //middleware
 const notFoundMiddleware = require("./middleware/notFound");
 const errorHandlerMiddleware = require("./middleware/errorHandler");
@@ -44,7 +52,8 @@ app.use(cookieParser(process.env.JWT_SECRET));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(fileUpload());
+app.use(fileUpload({ useTempFiles: true }));
+
 // Routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/book", bookRouter);

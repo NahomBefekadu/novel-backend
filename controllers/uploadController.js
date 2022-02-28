@@ -2,8 +2,25 @@ const db = require("../db/connect");
 const { StatusCodes } = require("http-status-codes");
 const customErrors = require("../errors");
 const path = require("path");
-
+const cloudinary = require("cloudinary").v2;
+const fs = require("fs");
+//explore streams in the future
 const uploadImage = async (req, res) => {
+  const result = await cloudinary.uploader.upload(
+    req.files.image.tempFilePath,
+    { use_filename: true, folder: "Novel-app" }
+  );
+  console.log(result);
+
+  fs.unlinkSync(req.files.image.tempFilePath); // remove created temp files
+
+  res.status(StatusCodes.CREATED).json({
+    msg: "Query completed uploaded Image Successfully",
+    imagePath: { src: `${result.secure_url}` },
+  });
+};
+
+const uploadImageLocally = async (req, res) => {
   //check if file exists
   if (!req.files) {
     throw new customErrors.BadRequest("No files to upload");
