@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { body, check, validationResult } = require("express-validator");
 const { login, logout, register } = require("../controllers/authController");
 
 router.route("/login").post(login);

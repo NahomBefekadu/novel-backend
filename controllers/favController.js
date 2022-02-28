@@ -28,6 +28,7 @@ const getList = async (req, res) => {
   res.status(StatusCodes.OK).json({
     msg: "Query completed retrieved List successfully",
     Books: results.rows,
+    username: req.username,
   });
 };
 module.exports = {
