@@ -37,7 +37,10 @@ const login = async (req, res) => {
     password,
     results.rows[0].hashed_password
   );
-
+  const returnData = {
+    UserId: results.rows[0].id,
+    username: results.rows[0].username,
+  };
   console.log(correctPassword);
   if (!correctPassword) {
     throw new UnAuthenticated("Invalid Credentials");
@@ -45,7 +48,7 @@ const login = async (req, res) => {
   const tokenUser = createJWT(tempData);
   res.status(StatusCodes.OK).json({
     msg: "user logged in!",
-    user: results.rows[0],
+    user: returnData,
     userToken: tokenUser,
   });
 };

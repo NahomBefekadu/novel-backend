@@ -30,7 +30,7 @@ const personalBookRouter = require("./routes/personalBookRoute");
 const app = express();
 
 app.set("trust proxy", 1); // if app is behind nginx/or proxy
-app.use(
+/* app.use(
   rateLimiter({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 60, //60 requests per ip request
@@ -42,7 +42,7 @@ app.use(
     delayAfter: 20, // start delaying requests after 20 request in 10 minutes
     delayMs: 100, // add 100ms to each response
   })
-);
+); */
 app.use(helmet());
 app.use(cors());
 app.use(xss());

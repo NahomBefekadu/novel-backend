@@ -27,9 +27,9 @@ const getBooks = async (req, res) => {
 };
 // Post Section
 const createBook = async (req, res) => {
-  const statement = `INSERT INTO books (book_name,summary,author,isbn,publishing_year,genre,image,rating)
+  const statement = `INSERT INTO books (book_name,summary,author,isbn,publishing_year,genre,image,rating,user_id)
       VALUES
-      ($1,$2,$3,$4,$5,$6,$7,$8);`;
+      ($1,$2,$3,$4,$5,$6,$7,$8,$9);`;
   const values = [
     req.body.book_name,
     req.body.summary,
@@ -39,6 +39,7 @@ const createBook = async (req, res) => {
     req.body.genre,
     req.body.image,
     req.body.rating,
+    req.body.user_id,
   ];
   //console.log(query(statement, values));
 
@@ -47,7 +48,6 @@ const createBook = async (req, res) => {
 
   res.status(StatusCodes.CREATED).json({
     msg: "Query completed created Book Successfully",
-    request: values,
   });
 };
 // Patch Section
@@ -81,7 +81,7 @@ const DeleteBook = async (req, res) => {
   }
   res.status(StatusCodes.OK).json({
     msg: "Query completed Deleted Book Successfully",
-    resa: values,
+    resa: results,
   });
 };
 module.exports = {

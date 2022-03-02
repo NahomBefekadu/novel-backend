@@ -4,15 +4,21 @@ const customErrors = require("../errors");
 const path = require("path");
 const cloudinary = require("cloudinary").v2;
 const fs = require("fs");
+
+let cachedData;
+let cachedTime;
 //explore streams in the future
 const uploadImage = async (req, res) => {
   const result = await cloudinary.uploader.upload(
     req.files.image.tempFilePath,
     { use_filename: true, folder: "Novel-app" }
   );
+  console.log("request");
+  console.log(req);
+  console.log("result");
   console.log(result);
 
-  fs.unlinkSync(req.files.image.tempFilePath); // remove created temp files
+  //fs.unlinkSync(req.files.image.tempFilePath); // remove created temp files
 
   res.status(StatusCodes.CREATED).json({
     msg: "Query completed uploaded Image Successfully",
@@ -50,8 +56,7 @@ const uploadImageLocally = async (req, res) => {
 
 const getPersonalList = async (req, res) => {
   const statement = `SELECT book_name,summary,author,isbn,publishing_year,genre,image,rating
-  FROM personalBook
-  join books ON (personalBook.book_id=books.book_id)
+  FROM books
   where user_id = $1;`;
 
   if (cachedTime && cachedTime > Date.now() - 30 * 10000) {
@@ -75,7 +80,22 @@ const getPersonalList = async (req, res) => {
     username: req.username,
   });
 };
+
+const addToList = async (req, res) => {
+  const statement = `INSERT INTO personalBook (book_id,user_id)
+  VALUES ($1,$2)`;
+  const values = [req.body.book, req.params.id];
+  const results = await db.query(statement, values);
+  if (!results) {
+    throw new NotFound(`No List Found`);
+  }
+  res.status(StatusCodes.OK).json({
+    msg: "Query completed added to List successfully",
+  });
+};
+
 module.exports = {
   uploadImage,
   getPersonalList,
+  addToList,
 };

@@ -7,11 +7,11 @@ const authMiddleware = async (req, res, next) => {
 
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    throw new unAuthenticated("Authentication is Invalid!");
+    throw new CustomErrors.UnAuthenticated("Authentication is Invalid!");
   }
   const token = authHeader.split(" ")[1];
   if (!token) {
-    throw new CustomErrors.unAuthenticated("Authentication is Invalid!");
+    throw new CustomErrors.UnAuthenticated("Authentication is Invalid!");
   }
   console.log(token);
 
@@ -21,7 +21,7 @@ const authMiddleware = async (req, res, next) => {
     //req.user = { username: payload.username };
     next();
   } catch (error) {
-    throw new CustomErrors.unAuthenticated("Authentication is Invalid!");
+    throw new CustomErrors.UnAuthenticated("Authentication is Invalid!");
   }
 };
 module.exports = { authMiddleware };
